@@ -3,7 +3,7 @@ class vs_core::dependencies::packages (
     String $gitUserEmail    = 'undefined@example.com',
 ) {
 
-    class { 'vs_devops::packages::git':
+    class { 'vs_core::packages::git':
         gitUserName     => "${gitUserName}",
         gitUserEmail    => "${gitUserEmail}"
     }
@@ -20,10 +20,10 @@ class vs_core::dependencies::packages (
         }
     }
     
-    include vs_devops::packages::java
+    include vs_core::packages::java
     
     #############################################################
     # Install Latest CURL
     #############################################################
-    #include vs_devops::packages::curl
+    #include vs_core::packages::curl
 }
