@@ -22,6 +22,14 @@
     {
       "name": "puppet/wget",
       "version_requirement": ">= 2.0.0 < 3.0.0"
+    },
+    {
+      "name": "artberri/nvm",
+      "version_requirement": ">= 1.0.0 < 2.0.0"
+    },
+    {
+      "name": "willdurand/nodejs",
+      "version_requirement": ">= 2.0.0 < 3.0.0"
     }
   ],
   "operatingsystem_support": [
