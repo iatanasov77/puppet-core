@@ -1,6 +1,18 @@
 class vs_core::dependencies::git_setup (
+    String $gitUserName     = 'undefined_user_name',
+    String $gitUserEmail    = 'undefined@example.com',
     String $gitCredentials  = '',
 ) {
+    # Setup Git Global Config
+    git::config { 'user.name':
+        value   => $gitUserName,
+        user    => 'vagrant',
+    }
+    git::config { 'user.email':
+        value   => $gitUserEmail,
+        user    => 'vagrant',
+    }
+    
     # Download Git Prompt
     wget::fetch { "Download GitPrompt Script":
         source      => "https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh",

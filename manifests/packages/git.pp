@@ -5,17 +5,8 @@ class vs_core::packages::git (
     require git
            
     /*
-     * This make dependency cycle
-     * ---------------------------
-     * THIS SHOULD BE PLACED IN FINAL CONFIGURATIONS
-     *     
-    git::config { 'user.name':
-        value   => $gitUserName,
-        user    => 'vagrant',
-    }
-    git::config { 'user.email':
-        value   => $gitUserEmail,
-        user    => 'vagrant',
-    }
+     * `git::config ` make dependency cycle here
+     * -----------------------------------------
+     *
     */
 }
