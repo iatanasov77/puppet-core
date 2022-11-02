@@ -3,7 +3,12 @@ class vs_core::packages::git (
     String $gitUserEmail    = 'undefined@example.com',
 ) {
     require git
-                
+           
+    /*
+     * This make dependency cycle
+     * ---------------------------
+     * THIS SHOULD BE PLACED IN FINAL CONFIGURATIONS
+     *     
     git::config { 'user.name':
         value   => $gitUserName,
         user    => 'vagrant',
@@ -12,4 +17,5 @@ class vs_core::packages::git (
         value   => $gitUserEmail,
         user    => 'vagrant',
     }
+    */
 }

@@ -1,6 +1,15 @@
 class vs_core::frontendtools (
     Hash $frontendtools = {},
 ) {
+    
+    # Package 'tar' is required by module 'nodejs'
+    ##################################################
+    if ! defined( Package['tar'] ) {
+        Package { 'tar':
+            ensure => present,
+        }
+    }
+    
 	# Install Multiple NodeJs Versions If Defined
 	###################################################
 	if has_key( $frontendtools, 'nvm' ) {
