@@ -16,17 +16,23 @@ class vs_core::dependencies::php7 (
 		    	$requiredPackages	= [ Package['remi-release'] ]
 		    }
 		    
-			yumrepo { $repo:
-		        descr      	=> "Remi PHP ${phpVersion} RPM repository for Enterprise Linux",
-		        mirrorlist	=> $repoMirrors,
-		        require  	=> $requiredPackages,
-		        *          	=> $yumrepoDefaults,
-		    } ->
+		    # PHP 8.2 Has Not Mirror
+		    if $phpVersionShort != '82' {
+    			yumrepo { $repo:
+    		        descr      	=> "Remi PHP ${phpVersion} RPM repository for Enterprise Linux",
+    		        mirrorlist	=> $repoMirrors,
+    		        require  	=> $requiredPackages,
+    		        *          	=> $yumrepoDefaults,
+    		    }
+    		}
+    		
 		    Exec { 'Reset PHP Module':
                 command => 'dnf module reset -y php',
+                require => $requiredPackages,
             }
             -> Exec { 'Install PHP Module Stream':
                 command => "dnf module install -y php:remi-${phpVersion}",
+                require => $requiredPackages,
             }
 		}
 	}
