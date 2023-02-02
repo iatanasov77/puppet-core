@@ -47,7 +47,7 @@ class vs_core::vstools (
 	if ( 'ftpdeploy' in $vstools ) {
     	if $vstools['ftpdeploy'] == 'download' {
             wget::fetch { "Install FtpDeploy script":
-                source      => "http://download.vankosoft.org/VsTools/ftpdeploy.phar",
+                source      => "http://downloads.vankosoft.org/vstools/3-ftpdeploy.phar",
                 destination => '/usr/local/bin/ftpdeploy',
                 verbose     => true,
                 mode        => '0777',
