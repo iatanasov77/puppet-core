@@ -14,6 +14,8 @@ class vs_core::packages (
         	include vs_core::packages::git_ftp
         } elsif ( $value == 'gitflow' ) {
             include vs_core::packages::git_flow
+        } elsif ( $value == 'python2' ) {
+            include vs_core::packages::python2
         } else {
         	if ! defined(Package[$value]) {
 	            package { $value:

@@ -10,7 +10,7 @@ class vs_core::packages::git_flow
         }
         'CentOS':
         {
-            if $::operatingsystemmajrelease == '8' {
+            if Integer( $::operatingsystemmajrelease ) >= 8 {
                 /* USING NVIE REPO
                 wget::fetch { "Download GitFlow Installer":
                     source      => "https://raw.github.com/nvie/gitflow/develop/contrib/gitflow-installer.sh",

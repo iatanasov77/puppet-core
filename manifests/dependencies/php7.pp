@@ -14,10 +14,12 @@ class vs_core::dependencies::php7 (
 		    } elsif $::operatingsystemmajrelease == '8' {
 		    	$repoMirrors		= "http://cdn.remirepo.net/enterprise/8/php${phpVersionShort}/x86_64/mirror"
 		    	$requiredPackages	= [ Package['remi-release'] ]
+		    } else {
+                $requiredPackages   = [ Package['remi-release'] ]
 		    }
 		    
 		    # PHP 8.2 Has Not Mirror
-		    if $phpVersionShort != '82' {
+		    if $phpVersionShort != '82' and Integer( $::operatingsystemmajrelease ) < 9 {
     			yumrepo { $repo:
     		        descr      	=> "Remi PHP ${phpVersion} RPM repository for Enterprise Linux",
     		        mirrorlist	=> $repoMirrors,

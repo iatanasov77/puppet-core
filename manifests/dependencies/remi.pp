@@ -7,18 +7,23 @@ class vs_core::dependencies::remi (
             if $::operatingsystemmajrelease == '7' {
                 $remiSafeMirrors    = 'http://cdn.remirepo.net/enterprise/7/safe/mirror'
                 $requiredPackages   = [ Package['epel-release'], Package['yum-plugin-priorities'] ]
-            } elsif $::operatingsystemmajrelease == '8' {
-                $remiSafeMirrors    = 'http://cdn.remirepo.net/enterprise/8/safe/x86_64/mirror'
-                
+            } elsif Integer( $::operatingsystemmajrelease ) >= 8 {
+                $remiSafeMirrors    = "http://cdn.remirepo.net/enterprise/${operatingsystemmajrelease}/safe/x86_64/mirror"
                 $requiredPackages    = [ Package['epel-release'] ]
             }
             
             if ! defined( Package['remi-release'] ) {
+                if empty( $remiReleaseRpm ) {
+                    $remiReleaseSource  = "http://rpms.remirepo.net/enterprise/remi-release-${operatingsystemmajrelease}.rpm"
+                } else {
+                    $remiReleaseSource  = $remiReleaseRpm
+                }
+                
                 Package { 'remi-release':
                     ensure   => 'present',
                     name     => 'remi-release',
                     provider => 'rpm',
-                    source   => $remiReleaseRpm,
+                    source   => $remiReleaseSource,
                     require  => $requiredPackages,
                 }
             }
