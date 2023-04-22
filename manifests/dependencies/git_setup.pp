@@ -1,7 +1,7 @@
 class vs_core::dependencies::git_setup (
     String $gitUserName     = 'undefined_user_name',
     String $gitUserEmail    = 'undefined@example.com',
-    String $gitCredentials  = '',
+    Array $gitCredentials  	= [],
 ) {
     # Setup Git Global Config
     git::config { 'user.name':
@@ -38,7 +38,15 @@ class vs_core::dependencies::git_setup (
         environment => ["HOME=/home/vagrant"],
     } ->
     file { '/home/vagrant/.git-credentials':
-        content => "${gitCredentials}",
-        owner   => 'vagrant',
+		ensure => present,
+	}
+	
+    $gitCredentials.each |String $value|
+    {
+        file_line { "${value}":
+            path    => '/home/vagrant/.git-credentials',
+            line    => "${value}",
+            require => File['/home/vagrant/.git-credentials'],
+        }
     }
 }
