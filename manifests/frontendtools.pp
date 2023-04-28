@@ -12,7 +12,7 @@ class vs_core::frontendtools (
     
 	# Install Multiple NodeJs Versions If Defined
 	###################################################
-	if has_key( $frontendtools, 'nvm' ) {
+	if 'nvm' in $frontendtools {
 	    class { 'nvm':
 			user 				=> $frontendtools['nvm']['user'],
 			node_instances		=> $frontendtools['nvm']['node_instances'],
