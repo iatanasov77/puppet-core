@@ -3,6 +3,12 @@ class vs_core::dependencies::packages (
     String $gitUserEmail    = 'undefined@example.com',
 ) {
 
+    if $::operatingsystem == 'centos' and $::operatingsystemmajrelease == '9' and ! defined( Package['initscripts'] ) {
+        Package { 'initscripts':
+            ensure => present,
+        }
+    }
+    
     class { 'vs_core::packages::git':
         gitUserName     => "${gitUserName}",
         gitUserEmail    => "${gitUserEmail}"

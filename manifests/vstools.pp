@@ -13,12 +13,14 @@ class vs_core::vstools (
     }
 	
 	# Install VankoSoft GitflowReinit script
-    wget::fetch { "Install VankoSoft GitflowReinit script":
-        source      => "https://github.com/iatanasov77/bumpversion/raw/${vstools['gitflow-reinit']}/gitflow-reinit.php",
-        destination => '/usr/local/bin/gitflow-reinit',
-        verbose     => true,
-        mode        => '0777',
-        cache_dir   => '/var/cache/wget',
+	if ( 'gitflow-reinit' in $vstools ) {
+        wget::fetch { "Install VankoSoft GitflowReinit script":
+            source      => "https://github.com/iatanasov77/bumpversion/raw/${vstools['gitflow-reinit']}/gitflow-reinit.php",
+            destination => '/usr/local/bin/gitflow-reinit',
+            verbose     => true,
+            mode        => '0777',
+            cache_dir   => '/var/cache/wget',
+        }
     }
 	
 	# Install VankoSoft MkPhar script
