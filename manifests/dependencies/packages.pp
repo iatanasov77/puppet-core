@@ -20,6 +20,7 @@ class vs_core::dependencies::packages (
         }
     }
     
+    include vs_core::packages::ruby
     include vs_core::packages::java
     
     #############################################################
