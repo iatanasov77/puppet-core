@@ -5,6 +5,8 @@ class vs_core::packages::java
       version => 'latest',
     }
     */
+    
+    
     Package{ ['java-11-openjdk', 'java-11-openjdk-devel']:
         ensure => present,
     }
