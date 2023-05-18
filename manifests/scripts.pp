@@ -23,4 +23,15 @@ class vs_core::scripts
         mode    => '0777',
         source  => 'puppet:///modules/vs_core/set_default_java.sh',
     }
+    
+    #######################################
+    # Set VS DevEnv ENV Variables
+    #######################################
+    -> file { '/etc/profile.d/vs_devenv.sh':
+        ensure  => present,
+        owner   => 'root',
+        group   => 'root',
+        mode    => '0644',
+        source  => 'puppet:///modules/vs_core/vs_devenv.sh',
+    }
 }
