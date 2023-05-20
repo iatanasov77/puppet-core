@@ -49,6 +49,14 @@ class vs_core::frontendtools (
                 }
             }
             
+            'vue-cli':
+            {
+                exec { 'Install Vue CLI':
+                    command => '/usr/bin/yarn global add @vue/cli',
+                    require => Package['yarn']
+                }
+            }
+            
             default:
             {
             	package { "${key}":
