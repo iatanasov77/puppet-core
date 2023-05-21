@@ -13,11 +13,9 @@ class vs_core::frontendtools (
 	# Install Multiple NodeJs Versions If Defined
 	###################################################
 	if 'nvm' in $frontendtools {
-	    class { 'nvm':
+	    class { 'vs_core::nvm::artberri_nvm':
 			user 				=> $frontendtools['nvm']['user'],
 			node_instances		=> $frontendtools['nvm']['node_instances'],
-			manage_dependencies	=> false,
-			manage_profile		=> false,
 		} ->
 		file_line { 'add NVM_DIR to profile file':
 	    	path => "/home/${frontendtools['nvm']['user']}/.bashrc",
