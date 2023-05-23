@@ -55,6 +55,14 @@ class vs_core::frontendtools (
                 }
             }
             
+            'nest-cli':
+            {
+                exec { 'Install Nestjs CLI':
+                    command => '/usr/bin/yarn global add @nestjs/cli',
+                    require => Package['yarn']
+                }
+            }
+            
             default:
             {
             	package { "${key}":
