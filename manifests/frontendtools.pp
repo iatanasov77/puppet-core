@@ -63,6 +63,25 @@ class vs_core::frontendtools (
                 }
             }
             
+            'pm2':
+            {
+                package { 'pm2':
+                    provider    => 'npm',
+                    require     => Class['nodejs'],
+                }
+                
+                ####################################################
+                # Start Saved Applications On Boot
+                ####################################################
+                -> file { '/etc/init.d/pm2.sh':
+                    ensure  => present,
+                    owner   => 'root',
+                    group   => 'root',
+                    mode    => '0644',
+                    source  => 'puppet:///modules/vs_core/pm2.sh',
+                }
+            }
+            
             default:
             {
             	package { "${key}":
