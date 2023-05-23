@@ -26,7 +26,10 @@ class vs_core::dependencies::packages (
         }
     }
     
-    include vs_core::packages::ruby
+    # Dont Hardcode Ruby Version. For Example Mod Passenger Require Ruby 2.5
+    #########################################################################
+    #include vs_core::packages::ruby
+    
     include vs_core::packages::java
     
     #############################################################
