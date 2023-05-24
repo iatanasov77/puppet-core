@@ -73,12 +73,23 @@ class vs_core::frontendtools (
                 ####################################################
                 # Start Saved Applications On Boot
                 ####################################################
-                -> file { '/etc/init.d/pm2.sh':
+#                -> file { '/etc/init.d/pm2.sh':
+#                    ensure  => present,
+#                    owner   => 'root',
+#                    group   => 'root',
+#                    mode    => '0644',
+#                    source  => 'puppet:///modules/vs_core/pm2.sh',
+#                }
+                -> file { '/etc/systemd/system/pm2-vagrant.service':
                     ensure  => present,
                     owner   => 'root',
                     group   => 'root',
                     mode    => '0644',
-                    source  => 'puppet:///modules/vs_core/pm2.sh',
+                    source  => 'puppet:///modules/vs_core/pm2-vagrant.service',
+                }
+                -> Service { 'pm2-vagrant':
+                    ensure  => 'running',
+                    enable  => true,
                 }
             }
             
