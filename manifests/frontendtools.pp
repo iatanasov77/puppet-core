@@ -72,6 +72,8 @@ class vs_core::frontendtools (
                 
                 ####################################################
                 # Start Saved Applications On Boot
+                #----------------------------------
+                # https://pm2.keymetrics.io/docs/usage/startup/
                 ####################################################
 #                -> file { '/etc/init.d/pm2.sh':
 #                    ensure  => present,
