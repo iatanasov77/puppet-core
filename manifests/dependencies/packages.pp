@@ -26,7 +26,7 @@ class vs_core::dependencies::packages (
         }
     }
     
-    include vs_core::packages::java
+    include vs_java::openjdk
     
     #############################################################
     # Install Latest CURL
