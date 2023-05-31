@@ -1,4 +1,4 @@
-class vs_core::packages::openjdk (
+define vs_core::openjdk (
     $jdkVersion     = '17',
 ) {
     
