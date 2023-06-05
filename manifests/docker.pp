@@ -1,10 +1,12 @@
 class vs_core::docker (
-	Hash $config    = {},
+	Hash $config               = {},
+    String $dockerInstallStage = 'main',
 ) {
 	class { 'docker':
         ensure          => 'present',
         version         => "${config['version']}",
         docker_users    => $config['docker_users'],
+        stage           => $dockerInstallStage,
     }
     
     class { 'docker::compose':
