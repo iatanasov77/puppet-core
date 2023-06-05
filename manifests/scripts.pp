@@ -48,15 +48,4 @@ class vs_core::scripts
         source  => 'puppet:///modules/vs_core/vault_setup.php',
         require => File['/opt/vs_devenv'],
     }
-    
-    #######################################
-    # Set Vault Secrets
-    #######################################
-    -> file { '/opt/vs_devenv/vault_setup.php':
-        ensure  => present,
-        owner   => 'root',
-        group   => 'root',
-        mode    => '0777',
-        source  => 'puppet:///modules/vs_core/vault_setup.php',
-    }
 }
