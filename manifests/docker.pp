@@ -2,10 +2,18 @@ class vs_core::docker (
 	Hash $config               = {},
     String $dockerInstallStage = 'main',
 ) {
+    if 'tcp_bind' in $config {
+        $tcp_bind   = $config['tcp_bind']
+    } else {
+        $tcp_bind   = undef
+    }
+    
 	class { 'docker':
         ensure          => 'present',
         version         => "${config['version']}",
         docker_users    => $config['docker_users'],
+        tcp_bind        => $tcp_bind,
+        
         stage           => $dockerInstallStage,
     }
     
