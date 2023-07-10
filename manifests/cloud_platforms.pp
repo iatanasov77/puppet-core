@@ -31,4 +31,19 @@ class vs_core::cloud_platforms (
             ensure  => installed,
         }
     }
+    
+    if ( 'digitalocean' in $config and $config['digitalocean'] ) {
+        archive { "/tmp/doctl-1.94.0-linux-amd64.tar.gz":
+            ensure          => present,
+            source          => "https://github.com/digitalocean/doctl/releases/download/v1.94.0/doctl-1.94.0-linux-amd64.tar.gz",
+            extract         => true,
+            extract_path    => '/usr/local/bin',
+            cleanup         => true,
+        }
+        
+        -> file { '/usr/local/bin/doctl':
+            ensure  => 'present',
+            mode    => '0777',
+        }
+    }
 }
