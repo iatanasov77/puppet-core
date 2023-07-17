@@ -33,6 +33,7 @@ class vs_core::cloud_platforms (
     }
     
     if ( 'digitalocean' in $config and $config['digitalocean'] ) {
+    
         archive { "/tmp/doctl-1.94.0-linux-amd64.tar.gz":
             ensure          => present,
             source          => "https://github.com/digitalocean/doctl/releases/download/v1.94.0/doctl-1.94.0-linux-amd64.tar.gz",
@@ -40,10 +41,24 @@ class vs_core::cloud_platforms (
             extract_path    => '/usr/local/bin',
             cleanup         => true,
         }
-        
         -> file { '/usr/local/bin/doctl':
             ensure  => 'present',
             mode    => '0777',
         }
+        
+    }
+    
+    ###################################################################################################
+    # Official s3cmd repo -- Command line tool for managing Amazon S3 and CloudFront services
+    # ----------------------------------------------------------------------------------------
+    # https://github.com/s3tools/
+    ##################################################################################################@
+    if ( 's3tools' in $config and $config['s3tools'] ) {
+        
+        # CentOs 7 and CentOs 8
+        package { "s3cmd":
+            ensure  => installed,
+        }
+        
     }
 }
