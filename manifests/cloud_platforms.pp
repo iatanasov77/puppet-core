@@ -32,18 +32,18 @@ class vs_core::cloud_platforms (
         }
     }
     
-    if ( 'digitalocean' in $config and $config['digitalocean'] ) {
+    if ( 'digital_ocean' in $config ) {
     
         archive { "/tmp/doctl-1.94.0-linux-amd64.tar.gz":
             ensure          => present,
-            source          => "https://github.com/digitalocean/doctl/releases/download/v1.94.0/doctl-1.94.0-linux-amd64.tar.gz",
+            source          => "https://github.com/digitalocean/doctl/releases/download/v${config['digital_ocean']}/doctl-${config['digital_ocean']}-linux-amd64.tar.gz",
             extract         => true,
             extract_path    => '/usr/local/bin',
             cleanup         => true,
         }
         -> file { '/usr/local/bin/doctl':
             ensure  => 'present',
-            mode    => '0777',
+            mode    => '0755',
         }
         
     }
@@ -60,5 +60,15 @@ class vs_core::cloud_platforms (
             ensure  => installed,
         }
         
+    }
+    
+    if ( 'k8s_station' in $config ) {
+        wget::fetch { "Install 'kubectl' Tool to Manage External Kubernetes  Clusters.":
+            source      => "https://dl.k8s.io/release/v${config['k8s_station']}/bin/linux/amd64/kubectl",
+            destination => '/usr/local/bin/kubectl',
+            verbose     => true,
+            mode        => '0755',
+            cache_dir   => '/var/cache/wget',
+        }
     }
 }
