@@ -71,4 +71,31 @@ class vs_core::cloud_platforms (
             cache_dir   => '/var/cache/wget',
         }
     }
+    
+    if ( 'rclone' in $config and $config['rclone']['enabled'] ) {
+        Exec { 'Install RClone':
+            command => 'curl https://rclone.org/install.sh | bash',
+        } ->
+        file { 'Ensure Vagrant Config Path Exist':
+            ensure => directory,
+            path   => "/home/vagrant/.config",
+            owner  => vagrant,
+            group  => vagrant,
+            mode   => '0750',
+        } ->
+        file { 'Create RClone Config Path':
+            ensure => directory,
+            path   => "/home/vagrant/.config/rclone",
+            owner  => vagrant,
+            group  => vagrant,
+            mode   => '0750',
+        } ->
+        file { 'Create rclone.conf':
+            path    => "/home/vagrant/.config/rclone/rclone.conf",
+            owner   => vagrant,
+            group   => vagrant,
+            mode    => '0664',
+            content => template( 'vs_core/rclone.conf.erb' ),
+        }
+    }
 }

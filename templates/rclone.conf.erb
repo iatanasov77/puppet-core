@@ -1,0 +1,11 @@
+<% @config['rclone']['configs'].each do |key, value| -%>
+[<%= key %>]
+provider = <%= value['provider'] %>
+type = s3
+env_auth = false
+access_key_id = <%= value['accessKey'] %>
+secret_access_key = <%= value['secretKey'] %>
+endpoint = <%= value['endpoint'] %>
+acl = <%= value['acl'] %>
+
+<% end -%>
