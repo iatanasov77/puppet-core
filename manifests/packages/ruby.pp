@@ -1,5 +1,8 @@
-class vs_core::packages::ruby
-{
+class vs_core::packages::ruby (
+    String $rubyVersion = '2.7.2',
+) {
+    $baseVersion    = $rubyVersion[0,3]
+    
     /*
      * Some Puppet Modules Use Some Ruby Functions Available in Ruby 2.7
      */
@@ -9,11 +12,11 @@ class vs_core::packages::ruby
                 Exec { 'Reset Ruby Module':
                     command => 'dnf module reset -y ruby',
                 }
-                -> Exec { 'Switch to Ruby 2.7 Stream':
-                    command => 'dnf module enable -y ruby:2.7',
+                -> Exec { "Switch to Ruby ${baseVersion} Stream":
+                    command => "dnf module enable -y ruby:${baseVersion}",
                 }
-                -> Exec { 'Install Ruby 2.7':
-                    command => 'dnf module -y install ruby:2.7/common',
+                -> Exec { "Install Ruby ${baseVersion}":
+                    command => "dnf module -y install ruby:${baseVersion}/common",
                 }
             }
         }
