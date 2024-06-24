@@ -15,9 +15,13 @@ class vs_core::dependencies::mysql_comunity_repo
 		    	$repo				= 'mysql57-community'
 		    	$requiredPackages	= [ Package['remi-release'], Package['yum-plugin-priorities'], Package['mysql-community-repo'] ]
 		    } elsif $::operatingsystemmajrelease == '8' {
-		    	$repoRpm			= 'https://repo.mysql.com/mysql80-community-release-el8-1.noarch.rpm'
+		    	$repoRpm			= 'https://repo.mysql.com/mysql84-community-release-el8-1.noarch.rpm'
 		    	$repo				= 'mysql80-community'
 		    	$requiredPackages	= [ Package['remi-release'], Package['mysql-community-repo'] ]
+		    } elsif $::operatingsystemmajrelease == '9' {
+                $repoRpm            = 'https://repo.mysql.com/mysql84-community-release-el9-1.noarch.rpm'
+                $repo               = 'mysql80-community'
+                $requiredPackages   = [ Package['remi-release'], Package['mysql-community-repo'] ]
 		    } else {
 		    	fail( "CentOS support only tested on major version 7 or 8, you are running version '${::operatingsystemmajrelease}'" )
 		    }

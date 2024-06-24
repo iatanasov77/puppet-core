@@ -34,23 +34,42 @@ class vs_core::dependencies::epel (
                 }
 		    }
 		    
+		    
+		    ###############################################################################################
+            # Install EPEL repository – PowerTools repository & EPEL repository are best friends.
+            # So enable EPEL repository as well.
+            # Note: May be Not Need This because is installed with class vs_devenv::dependencies::epel
+            ###############################################################################################
 		    if $::operatingsystemmajrelease == '8' {
-                ###############################################################################################
-                # Install EPEL repository – PowerTools repository & EPEL repository are best friends.
-                # So enable EPEL repository as well.
-                # Note: May be Not Need This because is installed with class vs_devenv::dependencies::epel
-                ###############################################################################################
                 Exec { 'Install EPEL repository':
                     command => 'dnf -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm',
-                } ->
+                }
+                
                 Exec { "Force Enabling YumRepo PowerTools":
                     command => 'dnf config-manager --set-enabled powertools',
                     require => [
                         Package['epel-release'],
                         Class['vs_core::dependencies::remi'],
+                        Exec["Install EPEL repository"],
                     ],
                 }
             }
+            
+            if $::operatingsystemmajrelease == '9' {
+                Exec { 'Install EPEL repository':
+                    command => 'dnf -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm',
+                }
+                
+                # powertools are called crb in epel 9
+                Exec { "Force Enabling YumRepo PowerTools":
+                    command => 'dnf config-manager --set-enabled crb',
+                    require => [
+                        Package['epel-release'],
+                        Class['vs_core::dependencies::remi'],
+                        Exec["Install EPEL repository"],
+                    ],
+                }
+            } 
 		}
 	}
 }
