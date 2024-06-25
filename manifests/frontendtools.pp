@@ -36,12 +36,18 @@ class vs_core::frontendtools (
     
     $frontendtools['tools'].each |String $key, Hash $data| {
      
+        if ( $data['version'] == 'latest' ) {
+            $version = ''
+        } else {
+            $version = "@${data['version']}"
+        }
+        
         case $key
         {
             'angular-cli':
             {
                 exec { 'Install Angular CLI':
-                    command => '/usr/bin/yarn global add @angular/cli',
+                    command => "/usr/bin/yarn global add @angular/cli${version}",
                     creates => '/usr/lib/node_modules/@angular/cli/bin/ng',
                     require => Package['yarn']
                 }
@@ -50,7 +56,7 @@ class vs_core::frontendtools (
             'vue-cli':
             {
                 exec { 'Install Vue CLI':
-                    command => '/usr/bin/yarn global add @vue/cli',
+                    command => "/usr/bin/yarn global add @vue/cli${version}",
                     require => Package['yarn']
                 }
             }
@@ -58,7 +64,7 @@ class vs_core::frontendtools (
             'nest-cli':
             {
                 exec { 'Install Nestjs CLI':
-                    command => '/usr/bin/yarn global add @nestjs/cli',
+                    command => "/usr/bin/yarn global add @nestjs/cli${version}",
                     require => Package['yarn']
                 }
             }

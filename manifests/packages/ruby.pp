@@ -8,7 +8,7 @@ class vs_core::packages::ruby (
      */
     case $::operatingsystem {
         centos: {
-            if $::operatingsystemmajrelease == '8' {
+            if Integer( $::operatingsystemmajrelease ) >= 8 {
                 Exec { 'Reset Ruby Module':
                     command => 'dnf module reset -y ruby',
                 }
