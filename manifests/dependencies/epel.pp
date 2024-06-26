@@ -6,21 +6,9 @@ class vs_core::dependencies::epel (
 			if ! defined( Package['epel-release'] ) and Integer( $::operatingsystemmajrelease ) < 9 {
 		        Exec { 'Import RPM GPG KEYS':
 		            command => 'rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY*',
-		        } ->
-		        Package { 'epel-release':
-		            ensure   => 'present',
-		            provider => 'yum',
-		        } ->
-		        yumrepo { 'epel-testing':
-                    descr       => "Enable Epel-Testing Repo",
-                    *           => $yumrepoDefaults,
-                }
+		        }
 		    }
 		    
-<<<<<<< Updated upstream
-		    
-=======
->>>>>>> Stashed changes
 		    ###############################################################################################
             # Install EPEL repository – PowerTools repository & EPEL repository are best friends.
             # So enable EPEL repository as well.
@@ -29,7 +17,12 @@ class vs_core::dependencies::epel (
 		    if $::operatingsystemmajrelease == '8' {
                 Exec { 'Install EPEL repository':
                     command => 'dnf -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm',
+                    require => [
+                        Exec['Import RPM GPG KEYS'],
+                    ],
                 }
+                $installPackages   = ['epel-release']
+                $requiredPackages  = [ Exec['Install EPEL repository'] ]
                 
                 Exec { "Force Enabling YumRepo PowerTools":
                     command => 'dnf config-manager --set-enabled powertools',
@@ -45,22 +38,12 @@ class vs_core::dependencies::epel (
                 Exec { 'Install EPEL repository':
                     command => 'dnf -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm',
                 }
-                
-<<<<<<< Updated upstream
-                # powertools are called crb in epel 9
-=======
-                Package { ['epel-release', 'epel-next-release']:
-                    ensure   => 'present',
-                    provider => 'yum',
-                    require => [
-                        Exec["Install EPEL repository"],
-                    ],
-                }
+                $installPackages   = ['epel-release', 'epel-next-release']
+                $requiredPackages  = [ Exec['Install EPEL repository'] ]
                 
                 #####################################################################
                 # powertools are called crb(CodeReady Linux Builder, or epel 9) now. 
                 #####################################################################
->>>>>>> Stashed changes
                 Exec { "Force Enabling YumRepo PowerTools":
                     command => 'dnf config-manager --set-enabled crb',
                     require => [
@@ -69,18 +52,21 @@ class vs_core::dependencies::epel (
                         Exec["Install EPEL repository"],
                     ],
                 }
-<<<<<<< Updated upstream
-=======
-                
-                yumrepo { 'epel-testing':
-                    descr   => "Enable Epel-Testing Repo",
-                    *       => $yumrepoDefaults,
-                    require => [
-                        Package['epel-release'],
-                    ],
-                }
->>>>>>> Stashed changes
-            } 
+            }
+            
+            Package { $installPackages:
+                ensure   => 'present',
+                provider => 'yum',
+                require => $requiredPackages,
+            }
+            
+            yumrepo { 'epel-testing':
+                descr   => "Enable Epel-Testing Repo",
+                *       => $yumrepoDefaults,
+                require => [
+                    Package['epel-release'],
+                ],
+            }
 		}
 	}
 }
