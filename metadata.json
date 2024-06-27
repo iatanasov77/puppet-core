@@ -16,10 +16,6 @@
       "version_requirement": ">= 1.0.0 < 5.0.0"
     },
     {
-      "name": "puppet/archive",
-      "version_requirement": ">= 1.0.0 < 5.0.0"
-    },
-    {
       "name": "puppet/wget",
       "version_requirement": ">= 2.0.0 < 3.0.0"
     },
@@ -60,7 +56,7 @@
   "requirements": [
     {
       "name": "puppet",
-      "version_requirement": ">= 4.0.0 < 7.0.0"
+      "version_requirement": ">= 7.9.0 < 9.0.0"
     }
   ],
   "description": "VS Puppet Core - Installing Dependant Repos and Packages."
