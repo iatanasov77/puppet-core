@@ -32,19 +32,9 @@ class vs_core::docker (
         $requiredPackages   = [ Class['docker'] ]
     }
     
-    ###############################################################
-    # Install Docker Compose
-    ###############################################################
-    if 'composer_raw_url' in $config {
-        $composer_raw_url   = $config['composer_raw_url']
-    } else {
-        $composer_raw_url   = undef
-    }
-    
     class { 'docker::compose':
         ensure  => present,
-        version => "${config['composer_version']}",
-        raw_url => $composer_raw_url,
+        /*version => "${config['composer_version']}",*/
     }
     
     ###############################################################
