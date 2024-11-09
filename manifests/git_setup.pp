@@ -1,8 +1,10 @@
-class vs_core::dependencies::git_setup (
+class vs_core::git_setup (
     String $gitUserName     = 'undefined_user_name',
     String $gitUserEmail    = 'undefined@example.com',
     Array $gitCredentials  	= [],
 ) {
+    include vs_core::packages::git_subtree
+    
     # Setup Git Global Config
     git::config { 'user.name':
         value   => $gitUserName,
