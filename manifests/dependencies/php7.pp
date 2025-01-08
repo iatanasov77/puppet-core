@@ -19,7 +19,7 @@ class vs_core::dependencies::php7 (
 		    }
 		    
 		    # PHP 8.2 Has Not Mirror
-		    if $phpVersionShort != '82' and Integer( $::operatingsystemmajrelease ) < 9 {
+		    if Integer( $phpVersionShort ) < 82  and Integer( $::operatingsystemmajrelease ) < 9 {
     			yumrepo { $repo:
     		        descr      	=> "Remi PHP ${phpVersion} RPM repository for Enterprise Linux",
     		        mirrorlist	=> $repoMirrors,
