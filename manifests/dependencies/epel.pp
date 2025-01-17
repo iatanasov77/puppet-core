@@ -2,7 +2,8 @@ class vs_core::dependencies::epel (
     $yumrepoDefaults,
 ) {
 	case $::operatingsystem {
-    	centos: {
+    	#centos: {
+    	'RedHat', 'CentOS', 'OracleLinux', 'Fedora', 'AlmaLinux': {
 			if ! defined( Package['epel-release'] ) and Integer( $::operatingsystemmajrelease ) < 9 {
 		        Exec { 'Import RPM GPG KEYS':
 		            command => 'rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY*',

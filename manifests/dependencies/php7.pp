@@ -5,7 +5,8 @@ class vs_core::dependencies::php7 (
 	$phpVersionShort    = regsubst( sprintf( "%.1f", $phpVersion ), '[.]', '', 'G' )
 	
 	case $::operatingsystem {
-    	centos: {
+    	#centos: {
+    	'RedHat', 'CentOS', 'OracleLinux', 'Fedora', 'AlmaLinux': {
     		$repo               = sprintf( 'remi-php%s', "${phpVersionShort}" )
     		
 		    if $::operatingsystemmajrelease == '7' {

@@ -1,12 +1,9 @@
 class vs_core::ffmpeg (
     Hash $config    = {},
 ) {
-    if $::operatingsystem != 'centos' {
-        fail( "Unsupported OS '${::operatingsystem}'" )
-    }
-    
     case $::operatingsystem {
-        centos: {
+        #centos: {
+        'RedHat', 'CentOS', 'OracleLinux', 'Fedora', 'AlmaLinux': {
             if $::operatingsystemmajrelease == '8' {
                 Exec { 'Install RPMfusion Free repository':
                     command => 'dnf -y install https://download1.rpmfusion.org/free/el/rpmfusion-free-release-8.noarch.rpm',
@@ -29,6 +26,8 @@ class vs_core::ffmpeg (
                 fail( "Unsupported CentOS version '${::operatingsystemmajrelease}'" )
             }
         }
+        
+        default: { fail( "Unsupported OS '${::operatingsystem}'" ) }
     }
     
     package { 'ffmpeg':

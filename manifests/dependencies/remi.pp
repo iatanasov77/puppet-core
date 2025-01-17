@@ -3,7 +3,8 @@ class vs_core::dependencies::remi (
     String $remiReleaseRpm
 ) {
     case $::operatingsystem {
-        centos: {
+        #centos: {
+        'RedHat', 'CentOS', 'OracleLinux', 'Fedora', 'AlmaLinux': {
             if $::operatingsystemmajrelease == '7' {
                 $remiSafeMirrors    = 'http://cdn.remirepo.net/enterprise/7/safe/mirror'
                 $requiredPackages   = [ Package['epel-release'], Package['yum-plugin-priorities'] ]

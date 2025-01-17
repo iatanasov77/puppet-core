@@ -8,7 +8,7 @@ class vs_core::packages::git_flow
                 ensure => present,
             }
         }
-        'CentOS':
+        'RedHat', 'CentOS', 'OracleLinux', 'Fedora', 'AlmaLinux':
         {
             if Integer( $::operatingsystemmajrelease ) >= 8 {
                 /* USING NVIE REPO

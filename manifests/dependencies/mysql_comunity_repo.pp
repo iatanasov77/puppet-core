@@ -3,7 +3,8 @@
 class vs_core::dependencies::mysql_comunity_repo
 {
 	case $::operatingsystem {
-    	centos: {
+    	#centos: {
+    	'RedHat', 'CentOS', 'OracleLinux', 'Fedora', 'AlmaLinux': {
 		    if $::operatingsystemmajrelease == '7' {
 		    	if ! defined( Package['yum-plugin-priorities'] ) {
 		            Package { 'yum-plugin-priorities':

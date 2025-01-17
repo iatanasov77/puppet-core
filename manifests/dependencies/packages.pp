@@ -3,7 +3,11 @@ class vs_core::dependencies::packages (
     String $gitUserEmail    = 'undefined@example.com',
 ) {
 
-    if $::operatingsystem == 'centos' and $::operatingsystemmajrelease == '9' and ! defined( Package['initscripts'] ) {
+    if (
+        ( $::operatingsystem == 'centos' or $::operatingsystem == 'AlmaLinux' ) and
+        $::operatingsystemmajrelease == '9' and
+        ! defined( Package['initscripts'] )
+    ) {
         Package { 'initscripts':
             ensure => present,
         }
@@ -36,7 +40,6 @@ class vs_core::dependencies::packages (
     }
     */
 
-    
     #############################################################
     # Install Latest CURL
     #############################################################

@@ -14,7 +14,8 @@ class vs_core::dependencies::repos (
     }
             
     case $::operatingsystem {
-    	centos: {
+    	#centos: {
+    	'RedHat', 'CentOS', 'OracleLinux', 'Fedora', 'AlmaLinux': {
             class { 'vs_core::dependencies::epel':
                 yumrepoDefaults => $yumrepoDefaults,
             }
