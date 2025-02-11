@@ -34,7 +34,7 @@ class vs_core::cloud_platforms (
     
     if ( 'digital_ocean' in $config ) {
     
-        archive { "/tmp/doctl-1.94.0-linux-amd64.tar.gz":
+        archive { "/tmp/doctl-${config['digital_ocean']}-linux-amd64.tar.gz":
             ensure          => present,
             source          => "https://github.com/digitalocean/doctl/releases/download/v${config['digital_ocean']}/doctl-${config['digital_ocean']}-linux-amd64.tar.gz",
             extract         => true,
