@@ -1,6 +1,7 @@
 class vs_core::dependencies::packages (
     String $gitUserName     = 'undefined_user_name',
     String $gitUserEmail    = 'undefined@example.com',
+    String $jdkVersion      = '17',
 ) {
 
     if (
@@ -30,16 +31,10 @@ class vs_core::dependencies::packages (
         }
     }
     
-    vs_core::openjdk { 'openjdk-17':
-        jdkVersion  => '17',
+    vs_core::openjdk { "openjdk-${jdkVersion}":
+        jdkVersion  => "${jdkVersion}",
     }
     
-    /* EXEC THIS IF YOU NEEDED , BUT SHOULD BE IN MAIN OR AFTER MAIN STAGE
-    Exec{ 'Set Java Default 17':
-        command => '/opt/vs_devenv/set_default_java.sh 17',
-    }
-    */
-
     #############################################################
     # Install Latest CURL
     #############################################################
