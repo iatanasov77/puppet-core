@@ -39,4 +39,10 @@ class vs_core::dependencies::packages (
     # Install Latest CURL
     #############################################################
     #include vs_core::packages::curl
+    
+    exec { 'daemon-reload':
+        command     => 'systemctl daemon-reload',
+        path        => '/bin:/sbin:/usr/bin:/usr/sbin',
+        refreshonly => true,
+    }
 }

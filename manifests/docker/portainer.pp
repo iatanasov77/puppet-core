@@ -37,12 +37,6 @@ class vs_core::docker::portainer(
         mode   => '0750',
     }
     
-    exec { 'daemon-reload':
-        command     => 'systemctl daemon-reload',
-        path        => '/bin:/sbin:/usr/bin:/usr/sbin',
-        refreshonly => true,
-    }
-    
     service { 'portainer':
         ensure      => running,
         enable      => true,
