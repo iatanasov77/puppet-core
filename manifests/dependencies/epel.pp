@@ -1,10 +1,9 @@
 class vs_core::dependencies::epel (
     $yumrepoDefaults,
 ) {
-	case $::operatingsystem {
-    	#centos: {
+	case $facts['os']['name'] {
     	'RedHat', 'CentOS', 'OracleLinux', 'Fedora', 'AlmaLinux': {
-			if ! defined( Package['epel-release'] ) and Integer( $::operatingsystemmajrelease ) < 9 {
+			if ! defined( Package['epel-release'] ) and Integer( $facts['os']['release']['major'] ) < 9 {
 		        Exec { 'Import RPM GPG KEYS':
 		            command => 'rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY*',
 		        }
@@ -15,7 +14,7 @@ class vs_core::dependencies::epel (
             # So enable EPEL repository as well.
             # Note: May be Not Need This because is installed with class vs_devenv::dependencies::epel
             ###############################################################################################
-		    if $::operatingsystemmajrelease == '8' {
+		    if $facts['os']['release']['major'] == '8' {
                 Exec { 'Install EPEL repository':
                     command => 'dnf -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm',
                     require => [
@@ -35,7 +34,7 @@ class vs_core::dependencies::epel (
                 }
             }
             
-            if $::operatingsystemmajrelease == '9' {
+            if $facts['os']['release']['major'] == '9' {
                 Exec { 'Install EPEL repository':
                     command => 'dnf -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm',
                 }

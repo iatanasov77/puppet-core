@@ -29,9 +29,9 @@ class vs_core::frontendtools (
 	
 	# Sysstem NodeJs is needed
     class { 'nodejs':
-        version       => "${frontendtools['nodejs']}",
-        target_dir    => '/usr/bin',
-        build_deps    => false,
+        repo_version  => "${frontendtools['nodejs']}",
+        #target_dir    => '/usr/bin',
+        #build_deps    => false,
     }
     
     $frontendtools['tools'].each |String $key, Hash $data| {

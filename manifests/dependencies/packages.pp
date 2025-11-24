@@ -5,8 +5,8 @@ class vs_core::dependencies::packages (
 ) {
 
     if (
-        ( $::operatingsystem == 'centos' or $::operatingsystem == 'AlmaLinux' ) and
-        $::operatingsystemmajrelease == '9' and
+        ( $facts['os']['name'] == 'centos' or $facts['os']['name'] == 'AlmaLinux' ) and
+        $facts['os']['release']['major'] == '9' and
         ! defined( Package['initscripts'] )
     ) {
         Package { 'initscripts':

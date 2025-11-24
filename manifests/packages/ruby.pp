@@ -6,10 +6,10 @@ class vs_core::packages::ruby (
     /*
      * Some Puppet Modules Use Some Ruby Functions Available in Ruby 2.7
      */
-    case $::operatingsystem {
+    case $facts['os']['name'] {
         #centos: {
         'RedHat', 'CentOS', 'OracleLinux', 'Fedora', 'AlmaLinux': {
-            if Integer( $::operatingsystemmajrelease ) >= 8 {
+            if Integer( $facts['os']['release']['major'] ) >= 8 {
                 Exec { 'Reset Ruby Module':
                     command => 'dnf module reset -y ruby',
                 }

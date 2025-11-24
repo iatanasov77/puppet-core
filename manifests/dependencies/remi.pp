@@ -2,20 +2,19 @@ class vs_core::dependencies::remi (
     $yumrepoDefaults,
     String $remiReleaseRpm
 ) {
-    case $::operatingsystem {
-        #centos: {
+    case $facts['os']['name'] {
         'RedHat', 'CentOS', 'OracleLinux', 'Fedora', 'AlmaLinux': {
-            if $::operatingsystemmajrelease == '7' {
+            if $facts['os']['release']['major'] == '7' {
                 $remiSafeMirrors    = 'http://cdn.remirepo.net/enterprise/7/safe/mirror'
                 $requiredPackages   = [ Package['epel-release'], Package['yum-plugin-priorities'] ]
-            } elsif Integer( $::operatingsystemmajrelease ) >= 8 {
-                $remiSafeMirrors    = "http://cdn.remirepo.net/enterprise/${operatingsystemmajrelease}/safe/x86_64/mirror"
+            } elsif Integer( $facts['os']['release']['major'] ) >= 8 {
+                $remiSafeMirrors    = "http://cdn.remirepo.net/enterprise/${facts['os']['release']['major']}/safe/x86_64/mirror"
                 $requiredPackages    = [ Package['epel-release'] ]
             }
             
             if ! defined( Package['remi-release'] ) {
                 if empty( $remiReleaseRpm ) {
-                    $remiReleaseSource  = "http://rpms.remirepo.net/enterprise/remi-release-${operatingsystemmajrelease}.rpm"
+                    $remiReleaseSource  = "http://rpms.remirepo.net/enterprise/remi-release-${facts['os']['release']['major']}.rpm"
                 } else {
                     $remiReleaseSource  = $remiReleaseRpm
                 }

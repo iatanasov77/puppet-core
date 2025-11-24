@@ -1,6 +1,6 @@
 class vs_core::packages::python2
 {
-    if Integer( $::operatingsystemmajrelease ) > 8 {
+    if Integer( $facts['os']['release']['major'] ) > 8 {
         wget::fetch { "Download Python2 Installer":
             source      => "https://github.com/niess/python-appimage/releases/download/python2.7/python2.7.18-cp27-cp27m-manylinux1_x86_64.AppImage",
             destination => '/tmp/python2.7.18-cp27-cp27m-manylinux1_x86_64.AppImage',

@@ -1,6 +1,6 @@
 class vs_core::packages::git_flow
 {
-    case $operatingsystem 
+    case $facts['os']['name']
     {
         'Debian', 'Ubuntu':
         {
@@ -10,7 +10,7 @@ class vs_core::packages::git_flow
         }
         'RedHat', 'CentOS', 'OracleLinux', 'Fedora', 'AlmaLinux':
         {
-            if Integer( $::operatingsystemmajrelease ) >= 8 {
+            if Integer( $facts['os']['release']['major'] ) >= 8 {
                 /* USING NVIE REPO
                 wget::fetch { "Download GitFlow Installer":
                     source      => "https://raw.github.com/nvie/gitflow/develop/contrib/gitflow-installer.sh",
