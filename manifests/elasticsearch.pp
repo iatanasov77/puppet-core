@@ -18,10 +18,7 @@ class vs_core::elasticsearch (
     String $apiUsername = 'elastic',
     String $apiPassword = 'elastic',
     
-<<<<<<< HEAD
     Hash $apiConfig,
-=======
->>>>>>> 9244c815473026ea626abdfdaaa96a7924748a00
 ) {
     class { 'vs_core::elasticsearch::install':
         version     => $version,
@@ -32,11 +29,8 @@ class vs_core::elasticsearch (
         apiPort     => $apiPort,
         apiUsername => $apiUsername,
         apiPassword => $apiPassword,
-<<<<<<< HEAD
         
         apiConfig   => $apiConfig,
-=======
->>>>>>> 9244c815473026ea626abdfdaaa96a7924748a00
     }
     
     # Error: Could not find a suitable provider for elasticsearch_plugin
