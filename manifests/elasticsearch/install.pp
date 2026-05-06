@@ -9,7 +9,10 @@ class vs_core::elasticsearch::install (
     String $apiUsername = 'elastic',
     String $apiPassword = 'elastic',
     
+<<<<<<< HEAD
     Hash $apiConfig,
+=======
+>>>>>>> 9244c815473026ea626abdfdaaa96a7924748a00
 ) {
     if ( $yumRepo == false ) {
         $manageRepo = true
@@ -51,8 +54,11 @@ class vs_core::elasticsearch::install (
         api_ca_path             => undef,
         validate_tls            => true,
         
+<<<<<<< HEAD
         config                  => $apiConfig,
         
+=======
+>>>>>>> 9244c815473026ea626abdfdaaa96a7924748a00
         require                 => $requiredPackages,
     }
 }

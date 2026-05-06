@@ -12,9 +12,8 @@ class vs_core::dependencies::repos (
         'gpgcheck' => false,
         'priority' => 50,
     }
-            
-    case $::operatingsystem {
-    	#centos: {
+    
+    case $facts['os']['name'] {
     	'RedHat', 'CentOS', 'OracleLinux', 'Fedora', 'AlmaLinux': {
             class { 'vs_core::dependencies::epel':
                 yumrepoDefaults => $yumrepoDefaults,
@@ -25,7 +24,7 @@ class vs_core::dependencies::repos (
                 yumrepoDefaults => $yumrepoDefaults,
             }
             
-            if Integer( $::operatingsystemmajrelease ) >= 8 {
+            if Integer( $facts['os']['release']['major'] ) >= 8 {
                 if ! defined( Package['dnf-plugins-core'] ) {
                     Package { 'dnf-plugins-core':
                         ensure => present,
@@ -33,7 +32,7 @@ class vs_core::dependencies::repos (
                 }
 		    }
 		    
-            if $::operatingsystemmajrelease == '7' {
+            if $facts['os']['release']['major'] == '7' {
 		    	if ! defined( Package['yum-plugin-priorities'] ) {
 		            Package { 'yum-plugin-priorities':
 		                ensure => 'present',

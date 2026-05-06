@@ -2,10 +2,10 @@
 ###############################
 class vs_core::dependencies::mysql_comunity_repo
 {
-	case $::operatingsystem {
+	case $facts['os']['name'] {
     	#centos: {
     	'RedHat', 'CentOS', 'OracleLinux', 'Fedora', 'AlmaLinux': {
-		    if $::operatingsystemmajrelease == '7' {
+		    if $facts['os']['release']['major'] == '7' {
 		    	if ! defined( Package['yum-plugin-priorities'] ) {
 		            Package { 'yum-plugin-priorities':
 		                ensure => 'present',
@@ -15,11 +15,11 @@ class vs_core::dependencies::mysql_comunity_repo
 		    	$repoRpm			= 'https://repo.mysql.com/mysql80-community-release-el7-3.noarch.rpm'
 		    	$repo				= 'mysql57-community'
 		    	$requiredPackages	= [ Package['remi-release'], Package['yum-plugin-priorities'], Package['mysql-community-repo'] ]
-		    } elsif $::operatingsystemmajrelease == '8' {
+		    } elsif $facts['os']['release']['major'] == '8' {
 		    	$repoRpm			= 'https://repo.mysql.com/mysql84-community-release-el8-1.noarch.rpm'
 		    	$repo				= 'mysql80-community'
 		    	$requiredPackages	= [ Package['remi-release'], Package['mysql-community-repo'] ]
-		    } elsif $::operatingsystemmajrelease == '9' {
+		    } elsif $facts['os']['release']['major'] == '9' {
                 $repoRpm            = 'https://repo.mysql.com/mysql84-community-release-el9-1.noarch.rpm'
                 $repo               = 'mysql80-community'
                 $requiredPackages   = [ Package['remi-release'], Package['mysql-community-repo'] ]

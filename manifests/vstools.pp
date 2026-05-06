@@ -47,14 +47,24 @@ class vs_core::vstools (
 	
 	# Install FtpDeploy script
 	if ( 'ftpdeploy' in $vstools ) {
+        if ( $vstools['ftpdeploy']['source'] == 'github' ) {
+            # $source = "https://github.com/iatanasov77/ftp-deployment/releases/download/v2.9/deployment.phar"
+            $source = "https://github.com/dg/ftp-deployment/releases/download/v${vstools['ftpdeploy']['version']}/deployment.phar"
+        } else {
+            $source = "http://downloads.vankosoft.org/vstools/0-ftpdeploy-${vstools['ftpdeploy']['version']}.phar"
+        }
+        
         wget::fetch { "Install FtpDeploy script":
-            #source      => "https://github.com/iatanasov77/ftp-deployment/releases/download/v2.9/deployment.phar",
-            #source      => "https://github.com/dg/ftp-deployment/releases/download/${vstools['ftpdeploy']}/deployment.phar",
-            source      => "http://downloads.vankosoft.org/vstools/0-ftpdeploy-${vstools['ftpdeploy']}.phar",
-            destination => '/usr/local/bin/ftpdeploy',
+            source      => $source,
+            destination => '/usr/local/bin/ftpdeploy.phar',
             verbose     => true,
             mode        => '0777',
             cache_dir   => '/var/cache/wget',
+        }
+        
+        file { '/usr/local/bin/ftpdeploy':
+            ensure => 'link',
+            target => '/usr/local/bin/ftpdeploy.phar',
         }
     }
 }
