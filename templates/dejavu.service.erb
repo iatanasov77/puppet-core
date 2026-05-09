@@ -1,0 +1,20 @@
+[Unit]
+Description=Dejavu
+After=docker.service
+Requires=docker.service
+
+[Service]
+Restart=always
+StartLimitInterval=20
+StartLimitBurst=5
+TimeoutStartSec=0
+RestartSec=5
+SyslogIdentifier=dejavu
+
+ExecStartPre=/bin/bash -c "/usr/bin/docker container inspect dejavu 2> /dev/null || /usr/bin/docker run -d --name dejavu --privileged  -p <%= @config['ports'] %> <%= @config['image'] %>"
+
+ExecStart=/usr/bin/docker start -a dejavu
+ExecStop=/usr/bin/docker stop -t 10 dejavu
+
+[Install]
+WantedBy=multi-user.target
