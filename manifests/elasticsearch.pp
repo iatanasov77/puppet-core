@@ -19,6 +19,7 @@ class vs_core::elasticsearch (
     String $apiPassword = 'elastic',
     
     Hash $apiConfig,
+    Hash $guis,
 ) {
     class { 'vs_core::elasticsearch::install':
         version     => $version,
@@ -33,7 +34,24 @@ class vs_core::elasticsearch (
         apiConfig   => $apiConfig,
     }
     
-    # Error: Could not find a suitable provider for elasticsearch_plugin
-    #######################################################################
-    #class { 'vs_core::elasticsearch::gui': }
+    class { 'vs_core::elasticsearch::plugins': }
+    
+    $guis.each |String $guiKey, Hash $guiConfig| {
+        case $guiKey
+        {
+            'kibana':
+            {
+                class { "::vs_core::elasticsearch::gui::${$guiKey}":
+                    config  => $guiConfig,
+                    esHost  => "${apiProtocol}://${apiHost}:${apiPort}",
+                }
+            }
+            default:
+            {
+                class { "::vs_core::elasticsearch::gui::${$guiKey}":
+                    config  => $guiConfig,
+                }
+            }
+        }
+    }
 }
