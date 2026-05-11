@@ -17,9 +17,10 @@ class vs_core::elasticsearch (
     Integer $apiTimeout = 10,
     String $apiUsername = 'elastic',
     String $apiPassword = 'elastic',
-    
     Hash $apiConfig,
-    Hash $guis,
+    
+    Array $indexes      = [],
+    Hash $guis          = {},
 ) {
     class { 'vs_core::elasticsearch::install':
         version     => $version,
@@ -35,6 +36,15 @@ class vs_core::elasticsearch (
     }
     
     class { 'vs_core::elasticsearch::plugins': }
+    
+    $indexes.each |String $index| {
+        elasticsearch::index{ "${index}":
+            api_host        => "${apiHost}",
+            api_port        => $apiPort,
+            api_protocol    => "${apiProtocol}",
+            api_timeout     => $apiTimeout,
+        }
+    }
     
     $guis.each |String $guiKey, Hash $guiConfig| {
         case $guiKey
