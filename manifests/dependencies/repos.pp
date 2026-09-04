@@ -3,7 +3,6 @@ class vs_core::dependencies::repos (
 	$repos                 = {},
 	Boolean $forcePhp7Repo = true,
 	String $phpVersion     = '7.2',
-	String $mySqlProvider  = 'mysql'
 ) {
 
     $yumrepoDefaults = {
@@ -38,10 +37,6 @@ class vs_core::dependencies::repos (
 		                ensure => 'present',
 		            }
 		        }
-		        
-		        if $mySqlProvider == 'mysql' {
-                    include vs_core::dependencies::mysql_comunity_repo
-                }
 		    }
 		    
 		    if ( $forcePhp7Repo ) {
