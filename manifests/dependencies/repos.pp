@@ -1,9 +1,4 @@
-class vs_core::dependencies::repos (
-    Hash $dependencies     = {},
-	$repos                 = {},
-	Boolean $forcePhp7Repo = true,
-	String $phpVersion     = '7.2',
-) {
+class vs_core::dependencies::repos {
 
     $yumrepoDefaults = {
         'ensure'   => 'present',
@@ -15,11 +10,6 @@ class vs_core::dependencies::repos (
     case $facts['os']['name'] {
     	'RedHat', 'CentOS', 'OracleLinux', 'Fedora', 'AlmaLinux': {
             class { 'vs_core::dependencies::epel':
-                yumrepoDefaults => $yumrepoDefaults,
-            }
-            
-            class { 'vs_core::dependencies::remi':
-                remiReleaseRpm  => "${dependencies['remiReleaseRpm']}",
                 yumrepoDefaults => $yumrepoDefaults,
             }
             
@@ -38,13 +28,6 @@ class vs_core::dependencies::repos (
 		            }
 		        }
 		    }
-		    
-		    if ( $forcePhp7Repo ) {
-			    class { 'vs_core::dependencies::php7':
-			    	phpVersion		=> $phpVersion,
-					yumrepoDefaults	=> $yumrepoDefaults,
-			    }
-			}
 	    }
 	}
 }

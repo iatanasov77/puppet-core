@@ -28,7 +28,6 @@ class vs_core::dependencies::epel (
                     command => 'dnf config-manager --set-enabled powertools',
                     require => [
                         Package['epel-release'],
-                        Class['vs_core::dependencies::remi'],
                         Exec["Install EPEL repository"],
                     ],
                 }
