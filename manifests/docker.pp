@@ -11,6 +11,13 @@ class vs_core::docker (
         $tcp_bind   = undef
     }
     
+    ##############################################################################
+    # This Package Exists on AlmaLinux 8 and Conflicts with Docker Installation
+    ##############################################################################
+    package { 'runc':
+        ensure => 'purged',
+    } ->
+    
     class { 'docker':
         ensure          => 'present',
         version         => "${config['version']}",
