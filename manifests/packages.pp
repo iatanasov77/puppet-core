@@ -16,6 +16,8 @@ class vs_core::packages (
             include vs_core::packages::git_flow
         } elsif ( $value == 'python2' ) {
             include vs_core::packages::python2
+        } elsif ( $value == 'yq' ) {
+            include vs_core::packages::yq
         } else {
         	if ! defined(Package[$value]) {
 	            package { $value:
