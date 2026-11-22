@@ -5,7 +5,7 @@ class vs_core::app_monitoring (
     String $hostIp              = '0.0.0.0',
 ) {
     if $grafanaConfig['enabled'] {
-        class { 'vs_devenv::subsystems::app_monitoring::grafana':
+        class { 'vs_core::app_monitoring::grafana':
             config => $grafanaConfig,
         }
     }

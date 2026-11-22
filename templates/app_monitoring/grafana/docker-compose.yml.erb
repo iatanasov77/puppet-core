@@ -6,7 +6,7 @@ services:
         working_dir: '<%= @grafanaDirectory %>'
         
         ports:
-            - "3000:3000"
+            - "<%= @config['port'] %>:3000"
         
         networks:
             - grafana-net
@@ -90,10 +90,10 @@ services:
             - '--web.enable-lifecycle'
         
         ports:
-            - "9090:9090"
+            - "<%= @prometheusConfig['port'] %>:9090"
         
         expose:
-            - 9090
+            - <%= @prometheusConfig['port'] %>
         
         networks:
             - grafana-net

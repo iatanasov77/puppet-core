@@ -4,6 +4,7 @@ class vs_core::app_monitoring::grafana (
     String $hostIp              = '0.0.0.0',
 ) {
     $grafanaDirectory = '/opt/grafana'
+    $prometheusConfig = $config['dataSources']['prometheus']
     
     File { 'grafana_opt_dir':
         path    => "${grafanaDirectory}",
@@ -57,5 +58,39 @@ class vs_core::app_monitoring::grafana (
         notify  => [
             Exec['daemon-reload'],
         ],
+    }
+    
+    service { 'grafana':
+        ensure      => running,
+        enable      => true,
+        provider    => systemd,
+        timeout     => 3600,
+        require     => File['grafana.service'],
+    }
+    
+    /*
+     * Create Dashboards
+     */
+    /*  
+    class { 'vs_core::app_monitoring::grafana_service_token':
+        grafanaHost => "${facts['hostname']}:${config['port']}",
+        require     => Service['grafana'],
+    }
+    $serviceToken = loadjson( '/tmp/GrafanaServiceToken.json' )
+    */
+    $serviceToken = ''
+    
+    $config['dashboards'].each |String $dashboard| {
+        vs_core::app_monitoring::grafana_dashboard { "Grafana Dashboard ${dashboard}":
+            grafanaHost     => "${facts['hostname']}:${config['port']}",
+            serviceToken    => $serviceToken,
+            dashboard       => $dashboard,
+            
+            #require         => Class['vs_core::app_monitoring::grafana_service_token'],
+            require         => [
+                Class['vs_core::app_monitoring::grafana_config'],
+                Service['grafana']
+            ],
+        }
     }
 }

@@ -9,6 +9,8 @@ class vs_core::app_monitoring::grafana_config (
     }
     
     if ( $config['dataSources']['prometheus']['enabled'] ) {
+        $prometheusConfig = $config['dataSources']['prometheus']
+        
         File { 'grafana_prometheus_config':
             path    => "${grafanaDirectory}/configs/prometheus.yml",
             owner   => root,
@@ -40,6 +42,8 @@ class vs_core::app_monitoring::grafana_config (
     }
     
     if ( $config['dataSources']['graphite']['enabled'] ) {
+        $graphiteConfig = $config['dataSources']['graphite']
+        
         File { 'monitoring_grafana_datasource_graphite':
             path    => "${grafanaDirectory}/datasources/graphite.yaml",
             owner   => root,

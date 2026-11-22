@@ -1,7 +1,7 @@
 datasources:
     - name: Prometheus
       type: prometheus
-      url: http://prometheus:9090
+      url: http://<%= @prometheusConfig['host'] %>:<%= @prometheusConfig['port'] %>
       access: proxy
       isDefault: true
       basicAuth: false

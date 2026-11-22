@@ -1,6 +1,6 @@
 datasources:
     - name: Graphite
       type: graphite
-      url: http://graphite:8080
+      url: http://<%= @graphiteConfig['host'] %>:<%= @graphiteConfig['port'] %>
       access: proxy
       isDefault: false
