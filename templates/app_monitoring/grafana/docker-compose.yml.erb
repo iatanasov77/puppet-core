@@ -21,24 +21,12 @@ services:
             
             # add plugins if you want
             #GF_INSTALL_PLUGINS: []
-            
-<% if @config['dataSources']['graphite']['enabled'] -%>
-    graphite:
-        image: graphiteapp/graphite-statsd
-        container_name: graphite
-        restart: always
-        working_dir: '<%= @grafanaDirectory %>'
-        
-        networks:
-            - grafana-net
-        
-        volumes:
-            - /[install path]/configs:/opt/graphite/conf
-            - /[install path]/data:/opt/graphite/storage
-            - /[install path]/statsd_config:/opt/statsd/config
-<% end -%>
 
 <% if @config['dataSources']['prometheus']['enabled'] -%>
+
+<% @config['dataSources']['prometheus']['exporters'].each do |exporter, config| -%>
+
+<% if exporter == 'node' -%>
     node-exporter:
         image: prom/node-exporter:latest
         container_name: node-exporter
@@ -58,7 +46,9 @@ services:
         
         networks:
             - grafana-net
-    
+<% end -%>
+
+<% if exporter == 'blackbox' -%>
     blackbox-exporter:
         image: prom/blackbox-exporter:latest
         container_name: blackbox-exporter
@@ -72,7 +62,10 @@ services:
         
         networks:
             - grafana-net
-    
+<% end -%>
+
+<% end -%>
+
     prometheus:
         image: prom/prometheus:latest
         container_name: prometheus
@@ -97,6 +90,32 @@ services:
         
         networks:
             - grafana-net
+<% end -%>
+
+<% if @config['dataSources']['graphite']['enabled'] -%>
+    graphite:
+        image: graphiteapp/graphite-statsd
+        container_name: graphite
+        restart: always
+        working_dir: '<%= @grafanaDirectory %>'
+        
+        ports:
+            - "<%= @config['dataSources']['graphite']['port'] %>:80"
+            - "2003-2004:2003-2004"
+            - "2023-2024:2023-2024"
+            - "8125:8125/udp"
+            - "8126:8126"
+        
+        expose:
+            - <%= @config['dataSources']['graphite']['port'] %>
+        
+        networks:
+            - grafana-net
+        
+        volumes:
+            - /[install path]/configs:/opt/graphite/conf
+            - /[install path]/data:/opt/graphite/storage
+            - /[install path]/statsd_config:/opt/statsd/config
 <% end -%>
 
 networks:

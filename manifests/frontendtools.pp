@@ -101,6 +101,14 @@ class vs_core::frontendtools (
                 }
             }
             
+            'graphite-cli':
+            {
+                exec { 'Install Graphite CLI':
+                    command => "/usr/bin/yarn global add @withgraphite/graphite-cli@${version}",
+                    require => Package['yarn']
+                }
+            }
+            
             default:
             {
             	package { "${key}":
