@@ -71,26 +71,21 @@ class vs_core::app_monitoring::grafana (
     /*
      * Create Dashboards
      */
-    /*  
-    class { 'vs_core::app_monitoring::grafana_service_token':
+    class { 'vs_core::app_monitoring::grafana_create_dashboards':
         grafanaHost => "${facts['hostname']}:${config['port']}",
-        require     => Service['grafana'],
+        dashboards  => $config['dashboards'],
+        require     => [
+            Class['vs_core::app_monitoring::grafana_config'],
+            Service['grafana'],
+        ],
     }
-    $serviceToken = loadjson( '/tmp/GrafanaServiceToken.json' )
-    */
-    $serviceToken = ''
     
-    $config['dashboards'].each |String $dashboard| {
-        vs_core::app_monitoring::grafana_dashboard { "Grafana Dashboard ${dashboard}":
-            grafanaHost     => "${facts['hostname']}:${config['port']}",
-            serviceToken    => $serviceToken,
-            dashboard       => $dashboard,
-            
-            #require         => Class['vs_core::app_monitoring::grafana_service_token'],
-            require         => [
-                Class['vs_core::app_monitoring::grafana_config'],
-                Service['grafana']
-            ],
-        }
+    /*
+     * Change Admin Password
+     */
+    class { 'vs_core::app_monitoring::grafana_password':
+        grafanaHost => "${facts['hostname']}:${config['port']}",
+        newPassword => $config['password'],
+        require     => Class['vs_core::app_monitoring::grafana_create_dashboards'],
     }
 }
