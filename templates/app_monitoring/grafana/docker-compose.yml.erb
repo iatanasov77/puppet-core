@@ -24,7 +24,7 @@ services:
 
 <% if @config['dataSources']['prometheus']['enabled'] -%>
 
-<% @config['dataSources']['prometheus']['exporters'].each do |exporter, config| -%>
+<% @config['dataSources']['prometheus']['exporters'].each do |exporter, exporterConfig| -%>
 
 <% if exporter == 'node' -%>
     node-exporter:
@@ -41,8 +41,11 @@ services:
             - '--path.sysfs=/host/sys'
             - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
         
+        ports:
+            - "<%= exporterConfig['port'] %>:9100"
+        
         expose:
-            - 9100
+            - <%= exporterConfig['port'] %>
         
         networks:
             - grafana-net
@@ -55,10 +58,10 @@ services:
         restart: unless-stopped
         
         ports:
-            - "9115:9115"
+            - "<%= exporterConfig['port'] %>:9115"
         
         expose:
-            - 9115
+            - <%= exporterConfig['port'] %>
         
         networks:
             - grafana-net
