@@ -1,7 +1,18 @@
 global:
     scrape_interval: <%= @prometheusConfig['scrapeInterval'] %>
     evaluation_interval: <%= @prometheusConfig['scrapeInterval'] %>
-    
+
+<% if @prometheusConfig['alertmanager']['enabled'] -%>
+rule_files:
+    - "rules/*.yml"
+
+alerting:
+    alertmanagers:
+    - static_configs:
+        - targets:
+            - <%= @prometheusConfig['alertmanager']['alertmanagerUrl'] %>
+<% end -%>
+
 scrape_configs:
     - job_name: 'prometheus'
       static_configs:

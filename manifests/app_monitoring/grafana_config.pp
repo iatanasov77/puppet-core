@@ -8,6 +8,12 @@ class vs_core::app_monitoring::grafana_config (
         mode    => '0755',
     }
     
+    File { 'monitoring_grafana_datasources_rules':
+        path    => "${grafanaDirectory}/rules",
+        ensure  => directory,
+        mode    => '0755',
+    }
+    
     if ( $config['dataSources']['prometheus']['enabled'] ) {
         $prometheusConfig = $config['dataSources']['prometheus']
         
@@ -18,6 +24,26 @@ class vs_core::app_monitoring::grafana_config (
             mode    => '0644',
             content => template( 'vs_core/app_monitoring/grafana/configs/prometheus.yml.erb' ),
             require => File['monitoring_grafana_datasources_configs'],
+        }
+        
+        if ( $config['dataSources']['prometheus']['alertmanager']['enabled'] ) {
+            File { 'grafana_prometheus_alertmanager_config':
+                path    => "${grafanaDirectory}/configs/alertmanager-blackbox.yml",
+                owner   => root,
+                group   => root,
+                mode    => '0644',
+                content => template( 'vs_core/app_monitoring/grafana/configs/alertmanager-blackbox.yml.erb' ),
+                require => File['monitoring_grafana_datasources_configs'],
+            }
+            
+            File { 'alert-rules-blackbox-exporter':
+                path    => "${grafanaDirectory}/rules/alerts.yml",
+                owner   => root,
+                group   => root,
+                mode    => '0644',
+                content => template( 'vs_core/app_monitoring/grafana/rules/alerts.yml.erb' ),
+                require => File['monitoring_grafana_datasources_rules'],
+            }
         }
     }
     

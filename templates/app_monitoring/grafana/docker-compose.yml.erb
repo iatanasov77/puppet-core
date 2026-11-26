@@ -24,6 +24,24 @@ services:
 
 <% if @config['dataSources']['prometheus']['enabled'] -%>
 
+<% if @config['dataSources']['prometheus']['alertmanager']['enabled'] -%>
+    alertmanager:
+        image: prom/alertmanager:latest
+        container_name: alertmanager
+        restart: unless-stopped
+        working_dir: '<%= @grafanaDirectory %>'
+        
+        ports:
+          - "<%= @config['dataSources']['prometheus']['alertmanager']['port'] %>:9093"
+        
+        volumes:
+            - ./configs/alertmanager-blackbox.yml:/etc/alertmanager/alertmanager.yml
+            - alertmanager_data:/alertmanager
+        
+        networks:
+            - grafana-net
+<% end -%>
+
 <% @config['dataSources']['prometheus']['exporters'].each do |exporter, exporterConfig| -%>
 
 <% if exporter == 'node' -%>
@@ -77,6 +95,7 @@ services:
         
         volumes:
             - ./configs/prometheus.yml:/etc/prometheus/prometheus.yml
+            - ./rules:/etc/prometheus/rules # Matches "rules/*.yml" relative to /etc/prometheus/
             - prometheus_data:/prometheus
         command:
             - '--config.file=/etc/prometheus/prometheus.yml'
@@ -129,3 +148,4 @@ volumes:
     grafana-storage:
         external: true
     prometheus_data:
+    alertmanager_data:
