@@ -26,24 +26,38 @@ class vs_core::app_monitoring::grafana_config (
             require => File['monitoring_grafana_datasources_configs'],
         }
         
-        if ( $config['dataSources']['prometheus']['alertmanager']['enabled'] ) {
-            File { 'grafana_prometheus_alertmanager_config':
-                path    => "${grafanaDirectory}/configs/alertmanager-blackbox.yml",
-                owner   => root,
-                group   => root,
-                mode    => '0644',
-                content => template( 'vs_core/app_monitoring/grafana/configs/alertmanager-blackbox.yml.erb' ),
-                require => File['monitoring_grafana_datasources_configs'],
-            }
-            
-            File { 'alert-rules-blackbox-exporter':
-                path    => "${grafanaDirectory}/rules/alerts.yml",
-                owner   => root,
-                group   => root,
-                mode    => '0644',
-                content => template( 'vs_core/app_monitoring/grafana/rules/alerts.yml.erb' ),
-                require => File['monitoring_grafana_datasources_rules'],
-            }
+        File { 'grafana_prometheus_alertmanager_config':
+            path    => "${grafanaDirectory}/configs/alertmanager.yml",
+            owner   => root,
+            group   => root,
+            mode    => '0644',
+            content => template( 'vs_core/app_monitoring/grafana/configs/alertmanager.yml.erb' ),
+            require => File['monitoring_grafana_datasources_configs'],
+        }
+        
+        #######################################
+        # Alert Rules
+        #######################################
+        File { 'alert-rules-blackbox-exporter':
+            path    => "${grafanaDirectory}/rules/alerts.yml",
+            owner   => root,
+            group   => root,
+            mode    => '0644',
+            content => template( 'vs_core/app_monitoring/grafana/rules/alerts.yml.erb' ),
+            require => File['monitoring_grafana_datasources_rules'],
+        }
+        
+        #######################################
+        # Email Templates
+        #######################################
+        File { 'alertmanager-email':
+            ensure  => present,
+            path    => "${grafanaDirectory}/configs/alertmanager-email.tmpl",
+            owner   => 'root',
+            group   => 'root',
+            mode    => '0777',
+            source  => 'puppet:///modules/vs_core/alertmanager-email.tmpl',
+            require => File['monitoring_grafana_datasources_configs'],
         }
     }
     

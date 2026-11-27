@@ -1,0 +1,43 @@
+global:
+    smtp_smarthost: '<%= @config['dataSources']['prometheus']['alertmanager']['smarthost'] %>'
+    smtp_from: <%= @config['dataSources']['prometheus']['alertmanager']['email_from'] %>
+    smtp_auth_username: '<%= @config['dataSources']['prometheus']['alertmanager']['auth_username'] %>'
+    smtp_auth_password: '<%= @config['dataSources']['prometheus']['alertmanager']['auth_password'] %>'
+    smtp_require_tls: true
+
+route:
+    group_by: ['alertname']
+    group_wait: 30s
+    group_interval: 5m
+    repeat_interval: 2m
+    
+    # A default receiver
+    receiver: 'web.hook'
+
+receivers:
+<% @config['dataSources']['prometheus']['alertmanager']['receivers'].each do |receiver, receiverConfig| -%>
+
+<% if receiver == 'web_hook' -%>
+    - name: '<%= receiverConfig['name'] %>'
+      webhook_configs:
+        - url: '<%= receiverConfig['webhook_url'] %>'
+<% end -%>
+
+<% if receiver == 'email_alerts' -%>
+    - name: '<%= receiverConfig['name'] %>'
+      email_configs:
+          - to: <%= receiverConfig['email_to'] %>
+            send_resolved: true
+<% end -%>
+
+<% end -%>
+
+inhibit_rules:
+    - source_match:
+        severity: 'critical'
+      target_match:
+        severity: 'warning'
+      equal: ['alertname', 'dev', 'instance']
+
+templates:
+    - /etc/alertmanager/config/alertmanager-email.tmpl

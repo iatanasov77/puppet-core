@@ -16,5 +16,6 @@ define vs_core::app_monitoring::grafana_dashboard (
     
     Exec { "Install Dashboard ${dashboard}":
         command => $command,
+        returns => [0, 56],
     }
 }

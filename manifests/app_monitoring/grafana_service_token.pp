@@ -7,6 +7,7 @@ class vs_core::app_monitoring::grafana_service_token (
     
     Exec { "Create GrafanaServiceAccount":
         command => "${serviceAccountCommand1} ${serviceAccountCommand2} ${serviceAccountCommand3}",
+        returns => [0, 56],
     }
     $serviceAccount = loadjson( '/tmp/GrafanaServiceAccount.json' )
     
@@ -16,5 +17,6 @@ class vs_core::app_monitoring::grafana_service_token (
     
     Exec { "Create GrafanaServiceToken":
         command => "${serviceTokenCommand1} ${serviceTokenCommand2} ${serviceTokenCommand3}",
+        returns => [0, 56],
     }
 }

@@ -1,6 +1,6 @@
 services:
     grafana:
-        image: grafana/grafana
+        image: grafana/grafana:<%= @config['version'] %>
         container_name: grafana
         restart: always
         working_dir: '<%= @grafanaDirectory %>'
@@ -23,10 +23,9 @@ services:
             #GF_INSTALL_PLUGINS: []
 
 <% if @config['dataSources']['prometheus']['enabled'] -%>
-
-<% if @config['dataSources']['prometheus']['alertmanager']['enabled'] -%>
+    
     alertmanager:
-        image: prom/alertmanager:latest
+        image: prom/alertmanager:<%= @config['dataSources']['prometheus']['alertmanager']['version'] %>
         container_name: alertmanager
         restart: unless-stopped
         working_dir: '<%= @grafanaDirectory %>'
@@ -35,24 +34,26 @@ services:
           - "<%= @config['dataSources']['prometheus']['alertmanager']['port'] %>:9093"
         
         volumes:
-            - ./configs/alertmanager-blackbox.yml:/etc/alertmanager/alertmanager.yml
+            - ./configs/alertmanager.yml:/etc/alertmanager/alertmanager.yml
+            - ./configs/alertmanager-email.tmpl:/etc/alertmanager/config/alertmanager-email.tmpl
             - alertmanager_data:/alertmanager
         
         networks:
             - grafana-net
-<% end -%>
 
 <% @config['dataSources']['prometheus']['exporters'].each do |exporter, exporterConfig| -%>
 
 <% if exporter == 'node' -%>
     node-exporter:
-        image: prom/node-exporter:latest
+        image: prom/node-exporter:<%= @config['dataSources']['prometheus']['exporters']['node']['version'] %>
         container_name: node-exporter
         restart: unless-stopped
+        
         volumes:
             - /proc:/host/proc:ro
             - /sys:/host/sys:ro
             - /:/rootfs:ro
+        
         command:
             - '--path.procfs=/host/proc'
             - '--path.rootfs=/rootfs'
@@ -71,7 +72,7 @@ services:
 
 <% if exporter == 'blackbox' -%>
     blackbox-exporter:
-        image: prom/blackbox-exporter:latest
+        image: prom/blackbox-exporter:<%= @config['dataSources']['prometheus']['exporters']['blackbox']['version'] %>
         container_name: blackbox-exporter
         restart: unless-stopped
         
@@ -88,15 +89,19 @@ services:
 <% end -%>
 
     prometheus:
-        image: prom/prometheus:latest
+        image: prom/prometheus:<%= @config['dataSources']['prometheus']['version'] %>
         container_name: prometheus
         restart: unless-stopped
         working_dir: '<%= @grafanaDirectory %>'
+        
+        depends_on:
+            - alertmanager
         
         volumes:
             - ./configs/prometheus.yml:/etc/prometheus/prometheus.yml
             - ./rules:/etc/prometheus/rules # Matches "rules/*.yml" relative to /etc/prometheus/
             - prometheus_data:/prometheus
+        
         command:
             - '--config.file=/etc/prometheus/prometheus.yml'
             - '--storage.tsdb.path=/prometheus'
@@ -116,7 +121,7 @@ services:
 
 <% if @config['dataSources']['graphite']['enabled'] -%>
     graphite:
-        image: graphiteapp/graphite-statsd
+        image: graphiteapp/graphite-statsd:<%= @config['dataSources']['graphite']['version'] %>
         container_name: graphite
         restart: always
         working_dir: '<%= @grafanaDirectory %>'
